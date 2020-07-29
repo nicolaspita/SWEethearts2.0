@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
-
-const app = express();
+const http = require('http');
+const socketio = require('socket.io');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
@@ -11,11 +11,16 @@ const exploreRouter = require('./Routers/exploreRouter');
 const submitRouter = require('./Routers/submitRouter');
 const loginRouter = require('./Routers/loginRouter');
 const profileRouter = require('./Routers/profileRouter');
+const chatRouter = require('./Routers/chatRouter');
 const flash = require('express-flash');
 const initializePassport = require('./passport');
 const passport = require('passport');
 initializePassport(passport);
 require('dotenv').config();
+
+const app = express();
+const server = http.createServer(app);
+const io = socketio(server);
 const PORT = 3000;
 
 /*
@@ -39,6 +44,14 @@ app.use('/api/signup', signUpRouter);
 app.use('/api/explore', exploreRouter);
 app.use('/api/submit', submitRouter);
 app.use('/api/profile', profileRouter);
+// app.use('/api/chatroom', chatRouter);
+
+/*
+ * Initialize socket.io
+ */
+io.on('connection', socket => {
+  console.log('New WS Connection...');
+});
 
 // globoal error handler
 app.use((err, req, res, next) => {
@@ -55,7 +68,7 @@ app.use((err, req, res, next) => {
 /*
  * Start server
  */
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server listening on port: ${PORT}`);
 });
 

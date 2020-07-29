@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import Spinner from './Spinner';
+import Chatroom from './Chatroom'
 import '../styles/ideapage.scss';
 import { Container, Col, Row, Button } from 'react-bootstrap';
 
@@ -131,6 +132,12 @@ const IdeaPage = (props) => {
                     Idea Creator Notified!
                   </Button>
                 )}
+                <NavLink to="/chatroom">
+                <Button variant="primary" className="m-2">
+                  {/* Start a chatroom with this user */}
+                  Start Chat
+                </Button>
+              </NavLink>
             </Row>
             <Row className="mx-auto">
               <NavLink to="/explore">

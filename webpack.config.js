@@ -54,7 +54,9 @@ const config = {
   devServer: {
     contentBase: './dist',
     proxy: {
-      '/api': 'http://localhost:3000',
+      '/api': 'http://[::1]:3000',
+      secure: false,
+      changeOrigin: true,
     },
     historyApiFallback: true,
   },
@@ -63,6 +65,9 @@ const config = {
       template: `./public/index.html`,
     }),
   ],
+  node: {
+    fs: 'empty',
+  },
 };
 
 module.exports = config;
