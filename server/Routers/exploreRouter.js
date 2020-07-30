@@ -11,7 +11,7 @@ router.get(
   techController.getTechs,
   (req, res) => {
     // console.log('res.locals.ideas', res.locals.ideas);
-    res.status(200).json([res.locals.ideas, res.locals.techs]);
+    res.json([res.locals.ideas, res.locals.techs]);
   }
 );
 
@@ -21,7 +21,7 @@ router.get(
   ideaController.getOneIdea,
   (req, res) => {
     // console.log('res.locals.idea', res.locals.idea);
-    res.status(200).res.json(res.locals.idea);
+    res.status(200).json(res.locals.idea);
   }
 );
 
