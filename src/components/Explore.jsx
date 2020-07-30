@@ -21,7 +21,8 @@ const Explore = (props) => {
       creator_username: '',
       image: '',
       techstacks: [],
-    },
+      view_count: 0
+    }
   ]);
 
   const [query, setQuery] = useState('');
@@ -55,7 +56,7 @@ const Explore = (props) => {
   const generateTech = techStack.map((tech, idx) => {
     return (
       <Form key={idx}>
-        <div key="checkbox" className="mb-2 mt-2 ml-3">
+        <div key="checkbox" className="mb-2 mt-2 ml-2">
           <Form.Check type="checkbox">
             <Form.Check.Input
               type="checkbox"
@@ -84,23 +85,28 @@ const Explore = (props) => {
   //check if user wants to filter for tech, otherwise just return sortedIdeas as-is
   const filteredIdeas = techFilter.length
     ? sortedIdeas.filter((idea) => {
-      //if idea has tech that is inside techFilter, then include that idea
-      for (let i = 0; i < techFilter.length; i++) {
-        const selectedTech = techFilter[i];
-        if (!idea.techstacks.includes(selectedTech)) return false;
-      }
-      return true;
-    })
+        //if idea has tech that is inside techFilter, then include that idea
+        for (let i = 0; i < techFilter.length; i++) {
+          const selectedTech = techFilter[i];
+          if (!idea.techstacks.includes(selectedTech)) return false;
+        }
+        return true;
+      })
     : sortedIdeas;
 
-
-  // ! generates the actual boxes
   const generateBoxes = filteredIdeas.map((idea, idx) => {
     return (
-      <Card key={idx} style={{ width: '20rem' }} className="m-3">
-        <Card.Img variant="top" src={idea.image} />
+      <Card
+        key={idx}
+        style={{ width: '20rem' }}
+        className="m-3 zoom card-shadow"
+      >
+        <Card.Img className="card-img-top" src={idea.image} />
         <Card.Body>
           <Card.Title>{idea.name}</Card.Title>
+          <Card.Text style={{ fontWeight: 200 }}>
+            Idea Views: {idea.view_count}
+          </Card.Text>
           <Card.Text style={{ fontWeight: 300 }}>{idea.description}</Card.Text>
           <Card.Text style={{ fontSize: 12, fontStyle: 'italic' }}>
             <span style={{ fontSize: 13, fontWeight: 'bold' }}>
@@ -114,8 +120,8 @@ const Explore = (props) => {
               pathname: '/idea',
               state: {
                 idea_id: idea.idea_id,
-                authStatus,
-              },
+                authStatus
+              }
             }}
           >
             <Button variant="primary"> Find out more </Button>
@@ -125,13 +131,16 @@ const Explore = (props) => {
               pathname: '/joinchat',
               state: {
                 idea_id: idea.idea_id,
-                authStatus,
-              },
+                authStatus
+              }
             }}
           >
             <Button variant="secondary"> Message </Button>
           </NavLink>
+<<<<<<< HEAD
           
+=======
+>>>>>>> 78c27691f356f9281d96c36c7ec87884a4b71ae0
         </Card.Body>
       </Card>
     );
@@ -180,16 +189,20 @@ const Explore = (props) => {
       </Row>
     </Container>
   );
-  
 
   return response.length === 0 ? (
     <Spinner />
   ) : (
+<<<<<<< HEAD
       <Fragment> 
         {explorePage} 
         
       </Fragment>
     );
+=======
+    <Fragment> {explorePage} </Fragment>
+  );
+>>>>>>> 78c27691f356f9281d96c36c7ec87884a4b71ae0
 };
 
 export default Explore;
