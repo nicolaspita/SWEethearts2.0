@@ -193,16 +193,8 @@ const Explore = (props) => {
   return response.length === 0 ? (
     <Spinner />
   ) : (
-<<<<<<< HEAD
-      <Fragment> 
-        {explorePage} 
-        
-      </Fragment>
-    );
-=======
     <Fragment> {explorePage} </Fragment>
   );
->>>>>>> 78c27691f356f9281d96c36c7ec87884a4b71ae0
 };
 
 export default Explore;

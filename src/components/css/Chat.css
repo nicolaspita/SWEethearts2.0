@@ -7,16 +7,6 @@
 }
 
 .container2 {
-<<<<<<< HEAD
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background: #FFFFFF;
-  border-radius: 8px;
-  height: 60%;
-  width: 35%;
-} 
-=======
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -25,7 +15,6 @@
 	height: 60%;
 	width: 35%;
 }
->>>>>>> 78c27691f356f9281d96c36c7ec87884a4b71ae0
 
 @media (min-width: 320px) and (max-width: 480px) {
 	.outerContainer {

@@ -11,12 +11,18 @@ const signUpRouter = require('./Routers/signupRouter');
 const exploreRouter = require('./Routers/exploreRouter');
 const submitRouter = require('./Routers/submitRouter');
 const loginRouter = require('./Routers/loginRouter');
+const statusRouter = require('./Routers/statusRouter');
 const profileRouter = require('./Routers/profileRouter');
+<<<<<<< HEAD
 <<<<<<< HEAD
 const chatRouter = require('./Controllers/chatController');
 =======
 const chatRouter = require('./Routers/chatRouter');
 >>>>>>> 78c27691f356f9281d96c36c7ec87884a4b71ae0
+=======
+const chatRouter = require('./Routers/chatRouter')
+const authController = require('./Controllers/authController');
+>>>>>>> 8e1cb47addd635e6ea0ad92afd4262129202f9c0
 const flash = require('express-flash');
 const initializePassport = require('./passport');
 const passport = require('passport');
@@ -92,6 +98,7 @@ io.on('connection', (socket) => {
 
     if (error) return callback(error);
 
+<<<<<<< HEAD
     // ! socket built in methods
     socket.emit('message', {
       user: 'admin',
@@ -105,6 +112,19 @@ io.on('connection', (socket) => {
     socket.join(user.room);
     callback();
   });
+=======
+		// ! socket built in methods
+		socket.emit('message', {
+			user: 'admin',
+			text: `${user.name}, welcome to the room ${user.room}`,
+		});
+		socket.broadcast
+			.to(user.room)
+			.emit('message', { user: 'admin', text: `${user.name}, has joined` });
+		socket.join(user.room);
+		callback();
+	});
+>>>>>>> 8e1cb47addd635e6ea0ad92afd4262129202f9c0
 
   socket.on('sendMessage', (message, callback) => {
     // const user = getUser(socket.id) // specific instance of the user's id
@@ -184,7 +204,17 @@ app.use('/api/profile', profileRouter);
 
 =======
 app.use('/api/joinchat', chatRouter);
+<<<<<<< HEAD
 >>>>>>> 78c27691f356f9281d96c36c7ec87884a4b71ae0
+=======
+app.use('/api/loggedIn', statusRouter);
+app.get('/api/logOut', (req, res) => {
+	console.log('hit the logout route');
+	// res.status(200).send([res.locals.isLoggedIn, res.locals.user]);
+	req.logout();
+	res.sendStatus(200);
+});
+>>>>>>> 8e1cb47addd635e6ea0ad92afd4262129202f9c0
 // globoal error handler
 app.use((err, req, res, next) => {
   const defaultErr = {
