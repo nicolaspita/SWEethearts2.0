@@ -12,6 +12,7 @@ const exploreRouter = require('./Routers/exploreRouter');
 const submitRouter = require('./Routers/submitRouter');
 const loginRouter = require('./Routers/loginRouter');
 const profileRouter = require('./Routers/profileRouter');
+const chatRouter = require('./Controllers/chatController');
 const flash = require('express-flash');
 const initializePassport = require('./passport');
 const passport = require('passport');
@@ -24,34 +25,78 @@ const {addUser, removeUser, getUser, getUsersInRoom} = require('./users')
 const server = http.createServer(app);
 const io = socketio(server); // Socket.io -> make server working
 
-
 // ! Implementing web sockets
 io.on('connection', (socket) => {
   // TODO: Make the connection to the database and load in data relevant to room
-
   console.log("We Have a new connection!!!")
 
   // socket.on will listen for events (emit 'join')
   socket.on('join' , ({name, room }, callback) => { // get data from the client to server
     const {error, user} = addUser({id: socket.id, name, room}) // returns either error or a user
-    if(error) return callback(error)
+    // add logic here to query the database
+
+    // query to check existing room
+    const roomQuery = `
+    INSERT INTO chat_messages (room_id)
+    SELECT ${room}
+    WHERE
+      NOT EXISTS (SELECT room_id FROM chat_messages WHERE room_id = ${room})`;
+
+    model.query(roomQuery, (err, result) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log('roomquery good');
+    });
+
+    // query here to retrieve old messages
+    const messageQuery = `
+    SELECT room_id, messages FROM chat_messages
+    WHERE room_id = ${room}
+    `;
+
+    model.query(messageQuery, (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      messageHistory = result.rows[0].messages;
+      console.log('in msg query', messageHistory);
+    });
+
+    if(error) return callback(error);
+    //iterate through the messageHistory 
+    // messageHistory.forEach(msg => {
+    //   socket.emit('message', {user: user.name, text: msg});
+    // });
+    // socket.emit('message', {user: 'admin', text: messageHistory });
     socket.emit('message' , {user: 'admin', text: `${user.name}, welcome to the room ${user.room}`});
     socket.broadcast.to(user.room).emit('message', { user: 'admin' , text: `${user.name}, has joined`})
     socket.join(user.room);
     callback();
   });
 
-
   socket.on('sendMessage', (message, callback) => {
     // const user = getUser(socket.id) // specific instance of the user's id
     const user = getUser(socket.id);
-
-    io.to(user.room).emit('message', {user: user.name, text: message})
+    console.log(message, user);
+    io.to(user.room).emit('message', {user: user.name, text: message});
 
     // TODO: SEND THE MESSAGE TO THE DATA BASE TO user.room with the user.name and the message
+    const queryText = 
+    `
+    UPDATE chat_messages
+    SET messages = array_append(messages, '${message}')
+    WHERE room_id = ${user.room};
+    `;
 
-
-    callback()
+    model.query(queryText, (err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log('msg db query good');
+    })
   });
 
   socket.on('disconnect' , () => {
@@ -73,8 +118,8 @@ app.use(
   session({
     secret: 'secret',
     resave: false,
-    saveUninitialized: false
-  })
+    saveUninitialized: false,
+  }),
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -84,10 +129,7 @@ app.use('/api/signup', signUpRouter);
 app.use('/api/explore', exploreRouter);
 app.use('/api/submit', submitRouter);
 app.use('/api/profile', profileRouter);
-
-
-
-
+// app.use('/api/joinchat', chatRouter);
 
 
 // globoal error handler

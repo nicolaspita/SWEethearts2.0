@@ -48,14 +48,21 @@ const Chat = ({location}) => {
   }, ['localhost:3000', location.search]) // useEffect will trigger when values in array update
 
 
-  useEffect(() => {
-    // make axios request that will access table with all chat messages
-    
+  // useEffect(() => {
+  //   // make axios request that will access table with all chat messages
+  //   axios.get('/api/joinchat')
+  //     .then((req, res) => {
+  //       console.log('req', req);
+  //       console.log('res', res);
+  //     })
+  //     .catch(err => console.log(err));
+  //   })
     // make query to table with chat messages -- filtered based off of room which is in state
+    /*
+     INSERT INTO chat_messages (user_id, room_id, messages) 
+     VALUES (user_id, room, {messages})
+    */
 
-
-
-  })
 
 
 

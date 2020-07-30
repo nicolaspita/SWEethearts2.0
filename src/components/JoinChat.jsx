@@ -1,17 +1,24 @@
-import React, {useState} from 'react';
-import {Link} from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import {Link} from 'react-router-dom';
+import axios from 'axios';
 
 import './css/Join.css';
 import {withRouter} from "react-router"
 
 const JoinChat = (props) => {
 
-  // console.log(props.location.state.idea_id)
+  console.log(props.location.state.idea_id)
   const room = props.location.state.idea_id
 
   const [name, setName] = useState('');
   // const [room, setRoom] = useState(''); 
 
+  useEffect(() => {
+    // make axios request that will access table with all chat messages
+    fetch('api/joinchat', {
+      method: 'POST',
+    })
+    })
 
   return (
     <div className="joinOuterContainer">
